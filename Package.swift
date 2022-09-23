@@ -5,11 +5,17 @@ import PackageDescription
 
 let package = Package(
     name: "RefdsCleanArchitecture",
+    platforms: [
+        .iOS(.v13),
+        .macOS(.v12),
+        .macCatalyst(.v15)
+    ],
     products: [
         .library(
             name: "RefdsCleanArchitecture",
             targets: ["RefdsCleanArchitecture"]),
         .library(name: "RefdsDomainLayer", targets: ["RefdsDomainLayer"]),
+        .library(name: "RefdsDataLayer", targets: ["RefdsDataLayer"]),
     ],
     dependencies: [],
     targets: [
@@ -20,5 +26,6 @@ let package = Package(
             name: "RefdsCleanArchitectureTests",
             dependencies: ["RefdsCleanArchitecture"]),
         .target(name: "RefdsDomainLayer", dependencies: []),
+        .target(name: "RefdsDataLayer", dependencies: ["RefdsDomainLayer"]),
     ]
 )
