@@ -8,23 +8,43 @@ public class NetworkAdapter {
         self.session = session
     }
     
-    private func handle(_ url: URL, statusCode: Int, withData data: Data) -> Result<Data, HttpError> {
+    private func handleError(_ url: URL, statusCode: Int) -> HttpError {
         switch statusCode {
-        case 200...299: return .success(data)
-        case 401: return .failure(.unauthorized(statusCode: statusCode, url: url))
-        case 403: return .failure(.forbidden(statusCode: statusCode, url: url))
-        case 400...499: return .failure(.badRequest(statusCode: statusCode, url: url))
-        case 500...599: return .failure(.serverError(statusCode: statusCode, url: url))
-        default: return .failure(.noConnectivity(statusCode: statusCode, url: url))
+        case 401: return .unauthorized(statusCode: statusCode, url: url)
+        case 403: return .forbidden(statusCode: statusCode, url: url)
+        case 400...499: return .badRequest(statusCode: statusCode, url: url)
+        case 500...599: return .serverError(statusCode: statusCode, url: url)
+        default: return .noConnectivity(statusCode: statusCode, url: url)
         }
     }
 }
 
 // MARK: - HttpClient
 extension NetworkAdapter: HttpClient {
-    public func get(toURL url: URL) async -> HttpGetClient.Result {
-        guard let result = try? await session.data(from: url) else { return .failure(.noConnectivity(statusCode: 0, url: url)) }
+    public func request<Request>(_ request: Request) async -> Result<Request.Response, HttpError> where Request : HttpRequestProtocol {
+        guard let url = makeUrlComponents(endpoint: request.endpoint).url else { return .failure(.invalidUrl) }
+        let urlRequest = makeUrlRequest(url: url, endpoint: request.endpoint)
+        guard let result = try? await session.data(for: urlRequest) else { return .failure(.noConnectivity(statusCode: 0, url: url)) }
         guard let statusCode = (result.1 as? HTTPURLResponse)?.statusCode else { return .failure(.noConnectivity(statusCode: 0, url: url)) }
-        return handle(url, statusCode: statusCode, withData: result.0)
+        guard let decoded = try? request.decode(result.0) else { return .failure(handleError(url, statusCode: statusCode)) }
+        return .success(decoded)
+    }
+    
+    private func makeUrlComponents(endpoint: HttpEndpoint) -> URLComponents {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = endpoint.scheme.rawValue
+        urlComponents.host = endpoint.host
+        urlComponents.path = endpoint.path
+        urlComponents.queryItems = endpoint.queryItems
+        return urlComponents
+    }
+    
+    private func makeUrlRequest(url: URL, endpoint: HttpEndpoint) -> URLRequest {
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = endpoint.method.rawValue
+        urlRequest.allHTTPHeaderFields = endpoint.headers?.asDictionary
+        guard let body = endpoint.body else { return urlRequest }
+        urlRequest.httpBody = body
+        return urlRequest
     }
 }
