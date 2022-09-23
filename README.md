@@ -1,1 +1,3 @@
-# refds-clean-architecture
+# RefdsCleanArchitecture
+
+A description of this package.
