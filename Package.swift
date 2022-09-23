@@ -9,6 +9,7 @@ let package = Package(
         .library(
             name: "RefdsCleanArchitecture",
             targets: ["RefdsCleanArchitecture"]),
+        .library(name: "RefdsDomainLayer", targets: ["RefdsDomainLayer"]),
     ],
     dependencies: [],
     targets: [
@@ -18,5 +19,6 @@ let package = Package(
         .testTarget(
             name: "RefdsCleanArchitectureTests",
             dependencies: ["RefdsCleanArchitecture"]),
+        .target(name: "RefdsDomainLayer", dependencies: []),
     ]
 )
