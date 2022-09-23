@@ -11,21 +11,14 @@ let package = Package(
         .macCatalyst(.v15)
     ],
     products: [
-        .library(
-            name: "RefdsCleanArchitecture",
-            targets: ["RefdsCleanArchitecture"]),
         .library(name: "RefdsDomainLayer", targets: ["RefdsDomainLayer"]),
         .library(name: "RefdsDataLayer", targets: ["RefdsDataLayer"]),
+        .library(name: "RefdsInfraLayer", targets: ["RefdsInfraLayer"])
     ],
     dependencies: [],
     targets: [
-        .target(
-            name: "RefdsCleanArchitecture",
-            dependencies: []),
-        .testTarget(
-            name: "RefdsCleanArchitectureTests",
-            dependencies: ["RefdsCleanArchitecture"]),
         .target(name: "RefdsDomainLayer", dependencies: []),
         .target(name: "RefdsDataLayer", dependencies: ["RefdsDomainLayer"]),
+        .target(name: "RefdsInfraLayer", dependencies: ["RefdsDataLayer"])
     ]
 )
