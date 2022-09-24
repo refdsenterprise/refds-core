@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol HttpEndpointProtocol {
+public protocol HttpEndpoint {
     var scheme: HttpScheme { get set }
     var host: String { get set }
     var path: String { get set }
@@ -10,7 +10,7 @@ public protocol HttpEndpointProtocol {
     var body: Data? { get set }
 }
 
-public extension HttpEndpointProtocol {
+public extension HttpEndpoint {
     var queryItems: [URLQueryItem]? {
         get { nil }
         set { queryItems = newValue }

@@ -21,7 +21,7 @@ public class NetworkAdapter {
 
 // MARK: - HttpClient
 extension NetworkAdapter: HttpClient {
-    public func request<Request>(_ request: Request) async -> Result<Request.Response, HttpError> where Request : HttpRequestProtocol {
+    public func request<Request>(_ request: Request) async -> Result<Request.Response, HttpError> where Request : HttpRequest {
         guard let url = makeUrlComponents(endpoint: request.httpEndpoint).url else { return .failure(.invalidUrl) }
         let urlRequest = makeUrlRequest(url: url, endpoint: request.httpEndpoint)
         guard let result = try? await session.data(for: urlRequest) else { return .failure(.noConnectivity(statusCode: 0, url: url)) }
@@ -30,7 +30,7 @@ extension NetworkAdapter: HttpClient {
         return .success(decoded)
     }
     
-    private func makeUrlComponents(endpoint: HttpEndpointProtocol) -> URLComponents {
+    private func makeUrlComponents(endpoint: HttpEndpoint) -> URLComponents {
         var urlComponents = URLComponents()
         urlComponents.scheme = endpoint.scheme.rawValue
         urlComponents.host = endpoint.host
@@ -39,7 +39,7 @@ extension NetworkAdapter: HttpClient {
         return urlComponents
     }
     
-    private func makeUrlRequest(url: URL, endpoint: HttpEndpointProtocol) -> URLRequest {
+    private func makeUrlRequest(url: URL, endpoint: HttpEndpoint) -> URLRequest {
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = endpoint.method.rawValue
         urlRequest.allHTTPHeaderFields = endpoint.headers?.asDictionary
