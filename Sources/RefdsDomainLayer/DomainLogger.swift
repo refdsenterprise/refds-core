@@ -12,7 +12,7 @@ public struct DomainLogger: DomainModel {
     }
     
     public func console() {
-        print("[LOGGER] \(tag.rawValue)\n\t* Date: \(date.asString())\n\t* Content: \(content)")
+        print("\n| -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n| -=- [LOGGER] -=- \(tag.rawValue)\n| -=-\t* Date: \(date.asString())\n| -=-\t* Content: \(content)\n")
     }
 }
 
