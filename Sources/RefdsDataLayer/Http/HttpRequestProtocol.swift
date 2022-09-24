@@ -1,8 +1,7 @@
 import Foundation
 
-public protocol HttpRequestProtocol {
+public protocol HttpRequestProtocol: HttpEndpointProtocol {
     associatedtype Response
-    var endpoint: HttpEndpoint { get }
     func decode(_ data: Data) throws -> Response
 }
 
