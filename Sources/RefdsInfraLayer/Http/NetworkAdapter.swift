@@ -22,8 +22,8 @@ public class NetworkAdapter {
 // MARK: - HttpClient
 extension NetworkAdapter: HttpClient {
     public func request<Request>(_ request: Request) async -> Result<Request.Response, HttpError> where Request : HttpRequestProtocol {
-        guard let url = makeUrlComponents(endpoint: request).url else { return .failure(.invalidUrl) }
-        let urlRequest = makeUrlRequest(url: url, endpoint: request)
+        guard let url = makeUrlComponents(endpoint: request.httpEndpoint).url else { return .failure(.invalidUrl) }
+        let urlRequest = makeUrlRequest(url: url, endpoint: request.httpEndpoint)
         guard let result = try? await session.data(for: urlRequest) else { return .failure(.noConnectivity(statusCode: 0, url: url)) }
         guard let statusCode = (result.1 as? HTTPURLResponse)?.statusCode else { return .failure(.noConnectivity(statusCode: 0, url: url)) }
         guard let decoded = try? request.decode(result.0) else { return .failure(handleError(url, statusCode: statusCode)) }

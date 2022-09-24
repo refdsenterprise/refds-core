@@ -1,8 +1,11 @@
 import Foundation
 
-public protocol HttpRequestProtocol: HttpEndpointProtocol {
+public protocol HttpRequestProtocol {
     associatedtype Response
+    
     var httpClient: HttpClient { get set }
+    var httpEndpoint: HttpEndpointProtocol { get set }
+    
     func decode(_ data: Data) throws -> Response
 }
 
