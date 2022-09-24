@@ -22,11 +22,32 @@ public class NetworkAdapter {
 // MARK: - HttpClient
 extension NetworkAdapter: HttpClient {
     public func request<Request>(_ request: Request) async -> Result<Request.Response, HttpError> where Request : HttpRequest {
-        guard let url = makeUrlComponents(endpoint: request.httpEndpoint).url else { return .failure(.invalidUrl) }
+        guard let url = makeUrlComponents(endpoint: request.httpEndpoint).url else {
+            let error = HttpError.invalidUrl
+            error.logger.console()
+            return .failure(error)
+        }
+        
         let urlRequest = makeUrlRequest(url: url, endpoint: request.httpEndpoint)
-        guard let result = try? await session.data(for: urlRequest) else { return .failure(.noConnectivity(statusCode: 0, url: url)) }
-        guard let statusCode = (result.1 as? HTTPURLResponse)?.statusCode else { return .failure(.noConnectivity(statusCode: 0, url: url)) }
-        guard let decoded = try? request.decode(result.0) else { return .failure(handleError(url, statusCode: statusCode)) }
+        
+        guard let result = try? await session.data(for: urlRequest) else {
+            let error = HttpError.noConnectivity(statusCode: 0, url: url)
+            error.logger.console()
+            return .failure(error)
+        }
+        
+        guard let statusCode = (result.1 as? HTTPURLResponse)?.statusCode else {
+            let error = HttpError.noConnectivity(statusCode: 0, url: url)
+            error.logger.console()
+            return .failure(error)
+        }
+        
+        guard let decoded = try? request.decode(result.0) else {
+            let error = handleError(url, statusCode: statusCode)
+            error.logger.console()
+            return .failure(error)
+        }
+        
         return .success(decoded)
     }
     
