@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "RefdsDataLayer"
-               BuildableName = "RefdsDataLayer"
-               BlueprintName = "RefdsDataLayer"
+               BlueprintIdentifier = "RefdsCore"
+               BuildableName = "RefdsCore"
+               BlueprintName = "RefdsCore"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -50,9 +50,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "RefdsDataLayer"
-            BuildableName = "RefdsDataLayer"
-            BlueprintName = "RefdsDataLayer"
+            BlueprintIdentifier = "RefdsCore"
+            BuildableName = "RefdsCore"
+            BlueprintName = "RefdsCore"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>

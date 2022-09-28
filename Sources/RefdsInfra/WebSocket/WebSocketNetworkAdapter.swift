@@ -1,5 +1,5 @@
 import Foundation
-import RefdsDataLayer
+import RefdsData
 
 public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
     private var session: URLSession
@@ -27,7 +27,7 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
         session = URLSession(configuration: .default, delegate: self, delegateQueue: OperationQueue())
     }
     
-    public func webSocket<Request>(request: Request) -> Self where Request : RefdsDataLayer.WebSocketRequest {
+    public func webSocket<Request>(request: Request) -> Self where Request : RefdsData.WebSocketRequest {
         guard let url = makeUrlComponents(endpoint: request.webSocketEndpoint).url else {
             let error = WebSocketError.invalidUrl
             error.logger.console()

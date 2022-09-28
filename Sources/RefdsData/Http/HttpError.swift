@@ -1,5 +1,5 @@
 import Foundation
-import RefdsDomainLayer
+import RefdsDomain
 
 public enum HttpError: Error, CustomStringConvertible {
     case invalidUrl

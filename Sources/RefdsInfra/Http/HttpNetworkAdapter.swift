@@ -1,5 +1,5 @@
 import Foundation
-import RefdsDataLayer
+import RefdsData
 
 public class HttpNetworkAdapter: HttpClient {
     private let session: URLSession

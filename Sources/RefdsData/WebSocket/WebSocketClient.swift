@@ -1,5 +1,5 @@
 import Foundation
-import RefdsDomainLayer
+import RefdsDomain
 
 public protocol WebSocketClient {
     typealias RequestData = DomainModel
