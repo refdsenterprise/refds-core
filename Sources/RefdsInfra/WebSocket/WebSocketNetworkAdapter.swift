@@ -31,7 +31,7 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
     }
     
     public func webSocket<Request>(request: Request) -> Self where Request : RefdsData.WebSocketRequest {
-        guard let url = makeUrl(endpoint: request.webSocketEndpoint) else {
+        guard let url = makeUrlComponents(endpoint: request.webSocketEndpoint).url else {
             logger(status: .error, requestData: currentRequestData, message: "\(request.webSocketEndpoint)")
             self.error?(WebSocketError.invalidUrl)
             return self
@@ -58,13 +58,13 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
         openConnectionSemaphore.signal()
     }
     
-    private func makeUrl(endpoint: WebSocketEndpoint) -> URL? {
-        var string = "\(endpoint.scheme)://\(endpoint.host)\(endpoint.path)"
-        if let queryItems = endpoint.queryItems, !queryItems.isEmpty {
-            let queryItemsString = queryItems.map({ "\($0.name)=\($0.value ?? "")" })
-            string += "?\(queryItemsString.joined(separator: "&")))"
-        }
-        return URL(string: string)
+    private func makeUrlComponents(endpoint: WebSocketEndpoint) -> URLComponents {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = endpoint.scheme.rawValue
+        urlComponents.host = endpoint.host
+        urlComponents.path = endpoint.path
+        urlComponents.queryItems = endpoint.queryItems
+        return urlComponents
     }
     
     private func didReceive() {
