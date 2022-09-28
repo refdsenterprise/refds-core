@@ -79,6 +79,7 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
                 }
                 self.receiveSemaphore.signal()
             }
+            didReceive()
         })
     }
     
