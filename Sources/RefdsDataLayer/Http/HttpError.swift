@@ -21,7 +21,11 @@ public enum HttpError: Error, CustomStringConvertible {
         case let .forbidden(statusCode, url): return "Forbidden - The request contained valid data and was understood by the server, but the server is refusing action.\n*\tStatus Code: \(statusCode)\n*\tURL: \(url.absoluteString)"
         }
     }
-    
+}
+
+// MARK: - DomainLoggerDataSource
+
+extension HttpError: DomainLoggerDataSource {
     public var logger: DomainLogger {
         return DomainLogger(tag: .error, date: .current, content: description)
     }

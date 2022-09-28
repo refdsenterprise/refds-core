@@ -12,7 +12,11 @@ public enum DomainError: Error, CustomStringConvertible {
         case .requestError(let description): return "Error on request - \(description)"
         }
     }
-    
+}
+
+// MARK: - DomainLoggerDataSource
+
+extension DomainError: DomainLoggerDataSource {
     public var logger: DomainLogger {
         return DomainLogger(tag: .error, date: .current, content: description)
     }

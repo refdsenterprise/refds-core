@@ -19,6 +19,6 @@ let package = Package(
     targets: [
         .target(name: "RefdsDomainLayer", dependencies: []),
         .target(name: "RefdsDataLayer", dependencies: ["RefdsDomainLayer"]),
-        .target(name: "RefdsInfraLayer", dependencies: ["RefdsDataLayer"])
+        .target(name: "RefdsInfraLayer", dependencies: ["RefdsDataLayer", "RefdsDomainLayer"])
     ]
 )

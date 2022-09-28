@@ -1,26 +1,13 @@
 import Foundation
 import RefdsDataLayer
 
-public class NetworkAdapter {
+public class HttpNetworkAdapter: HttpClient {
     private let session: URLSession
     
     public init(session: URLSession = .shared) {
         self.session = session
     }
     
-    private func handleError(_ url: URL, statusCode: Int) -> HttpError {
-        switch statusCode {
-        case 401: return .unauthorized(statusCode: statusCode, url: url)
-        case 403: return .forbidden(statusCode: statusCode, url: url)
-        case 400...499: return .badRequest(statusCode: statusCode, url: url)
-        case 500...599: return .serverError(statusCode: statusCode, url: url)
-        default: return .noConnectivity(statusCode: statusCode, url: url)
-        }
-    }
-}
-
-// MARK: - HttpClient
-extension NetworkAdapter: HttpClient {
     public func request<Request>(_ request: Request) async -> Result<Request.Response, HttpError> where Request : HttpRequest {
         guard let url = makeUrlComponents(endpoint: request.httpEndpoint).url else {
             let error = HttpError.invalidUrl
@@ -67,5 +54,15 @@ extension NetworkAdapter: HttpClient {
         guard let body = endpoint.body else { return urlRequest }
         urlRequest.httpBody = body
         return urlRequest
+    }
+    
+    private func handleError(_ url: URL, statusCode: Int) -> HttpError {
+        switch statusCode {
+        case 401: return .unauthorized(statusCode: statusCode, url: url)
+        case 403: return .forbidden(statusCode: statusCode, url: url)
+        case 400...499: return .badRequest(statusCode: statusCode, url: url)
+        case 500...599: return .serverError(statusCode: statusCode, url: url)
+        default: return .noConnectivity(statusCode: statusCode, url: url)
+        }
     }
 }

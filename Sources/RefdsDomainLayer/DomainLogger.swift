@@ -1,5 +1,9 @@
 import Foundation
 
+public protocol DomainLoggerDataSource {
+    var logger: DomainLogger { get }
+}
+
 public struct DomainLogger: DomainModel {
     public var tag: DomainLoggerTag
     public var date: Date
