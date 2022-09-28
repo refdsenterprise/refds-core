@@ -8,7 +8,6 @@ public protocol WebSocketRequest {
     var webSocketEndpoint: WebSocketEndpoint { get set }
     
     func decode(_ data: Data) throws -> Response
-    func logger(status: DomainLoggerTag)
 }
 
 public extension WebSocketRequest where Response: Decodable {
