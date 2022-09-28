@@ -32,9 +32,8 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
     
     public func webSocket<Request>(request: Request) -> Self where Request : RefdsData.WebSocketRequest {
         guard let url = makeUrlComponents(endpoint: request.webSocketEndpoint).url else {
-            let error = WebSocketError.invalidUrl
-            error.logger.console()
-            self.error?(error)
+            logger(status: .error, requestData: currentRequestData, message: "\(request.webSocketEndpoint)")
+            self.error?(WebSocketError.invalidUrl)
             return self
         }
         
