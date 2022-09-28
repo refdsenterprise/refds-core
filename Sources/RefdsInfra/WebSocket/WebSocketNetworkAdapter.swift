@@ -3,11 +3,14 @@ import RefdsData
 
 public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
     private var session: URLSession
-    
     private var webSocket: URLSessionWebSocketTask?
     private let openConnectionSemaphore = DispatchSemaphore(value: 1)
     private let receiveSemaphore = DispatchSemaphore(value: 1)
     private var currentRequestData: RequestData?
+    
+    public var status: ((WebSocketStatus) -> Void)?
+    public var error: ((WebSocketError) -> Void)?
+    public var success: ((Data) -> Void)?
     
     private let receiveQueue = DispatchQueue(
         label: "cedro.streaming.websocket.network.receive",

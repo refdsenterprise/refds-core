@@ -14,21 +14,6 @@ public protocol WebSocketClient {
 }
 
 public extension WebSocketClient {
-    var status: ((WebSocketStatus) -> Void)? {
-        get { nil }
-        set { status = newValue }
-    }
-    
-    var error: ((WebSocketError) -> Void)? {
-        get { nil }
-        set { error = newValue }
-    }
-    
-    var success: ((Data) -> Void)? {
-        get { nil }
-        set { success = newValue }
-    }
-    
     func logger(status: DomainLoggerTag, requestData: RequestData?, message: String?) {
         let json = requestData?.json.content ?? ""
         let content = "\t* Message: \(message ?? "")\n\(json)"
