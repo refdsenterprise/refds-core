@@ -63,7 +63,9 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
         urlComponents.scheme = endpoint.scheme.rawValue
         urlComponents.host = endpoint.host
         urlComponents.path = endpoint.path
-        urlComponents.queryItems = endpoint.queryItems
+        if let queryItems = endpoint.queryItems, !queryItems.isEmpty {
+            urlComponents.path += "?\(queryItems.map({ "\($0.name)=\($0.value ?? "")" }).joined(separator: "&")))"
+        }
         return urlComponents
     }
     
