@@ -1,4 +1,4 @@
-# Clean Architecture
+# Core with Clean Architecture
 
 > Biblioteca para auxiliar na construção de um projeto em swift aplicando clean architecture, afim de padronizar e organizar o código desenvolvido, favorecer a sua reusabilidade, assim como independência de tecnologia.
 
@@ -14,9 +14,9 @@ Por mais que a Clean Architecture foi criada em meados de 2012, está repleta de
 
 ### Camadas Implementadas
 
-- [X] Camada de Domínio `Domain Layer`
-- [X] Camada de Dados - `Data Layer`
-- [X] Camada de Infraestrutura - `Infra Layer`
+- [X] Camada de Domínio `RefdsDomain`
+- [X] Camada de Dados - `RefdsData`
+- [X] Camada de Infraestrutura - `RefdsInfra`
 
 ### Instalação
 
@@ -27,12 +27,12 @@ import PackageDescription
 
 let package = Package(
     dependencies: [
-        .package(url: "https://github.com/rafaelesantos/refds-clean-architecture.git", branch: "main")
+        .package(url: "https://github.com/rafaelesantos/refds-core.git", branch: "main")
     ],
     targets: [
         .target(
             name: "YourProject",
-            dependencies: ["RefdsDomainLayer", "RefdsDataLayer", "RefdsInfraLayer"]),
+            dependencies: ["RefdsCore"]),
     ]
 )
 ```
