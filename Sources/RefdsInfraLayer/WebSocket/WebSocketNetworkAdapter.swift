@@ -1,16 +1,8 @@
 import Foundation
 import RefdsDataLayer
 
-public protocol WebSocketNetworkAdapterDelegate {
-    func status(didChange status: WebSocketStatus)
-    func error(didReceive error: WebSocketError)
-    func success(didReceive data: Data)
-}
-
 public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
-    public var status: WebSocketStatus { didSet { delegate?.status(didChange: status) } }
     private var session: URLSession
-    private var delegate: WebSocketNetworkAdapterDelegate?
     
     private var webSocket: URLSessionWebSocketTask?
     private let openConnectionSemaphore = DispatchSemaphore(value: 1)
@@ -29,10 +21,8 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
         attributes: .concurrent
     )
     
-    public init(status: WebSocketStatus = .close, delegate: WebSocketNetworkAdapterDelegate) {
-        self.status = status
+    public override init() {
         self.session = .shared
-        self.delegate = delegate
         super.init()
         session = URLSession(configuration: .default, delegate: self, delegateQueue: OperationQueue())
     }
@@ -41,7 +31,7 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
         guard let url = makeUrlComponents(endpoint: request.webSocketEndpoint).url else {
             let error = WebSocketError.invalidUrl
             error.logger.console()
-            delegate?.error(didReceive: error)
+            self.error?(error)
             return self
         }
         
@@ -92,7 +82,7 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
     private func success(didReceive message: URLSessionWebSocketTask.Message) {
         switch message {
         case .string(let string):
-            if let data = string.data(using: .utf8) { delegate?.success(didReceive: data) }
+            if let data = string.data(using: .utf8) { success?(data) }
             else { failure(message: "WebSocket failed cast string receive to data") }
         default: failure(message: "WebSocket do not receive a string value")
         }
@@ -100,18 +90,18 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
     
     private func failure(message: String) {
         logger(status: .error, requestData: currentRequestData, message: message)
-        delegate?.error(didReceive: .custom(message: message))
+        error?(.custom(message: message))
     }
 }
 
 extension WebSocketNetworkAdapter: URLSessionWebSocketDelegate {
     public func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
-        status = .open
+        status?(.open)
         didReceive()
         openConnectionSemaphore.signal()
     }
     
     public func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
-        status = .close
+        status?(.close)
     }
 }
