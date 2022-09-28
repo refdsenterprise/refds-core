@@ -25,6 +25,6 @@ let package = Package(
             dependencies: ["RefdsDomain"]),
         .target(
             name: "RefdsInfra",
-            dependencies: ["RefdsData", "RefdsDomain"])
+            dependencies: ["RefdsData", "RefdsDomain"]),
     ]
 )

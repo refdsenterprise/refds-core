@@ -52,7 +52,8 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
             let string = requestData.json
             guard string.success else { return self.logger(status: .error, requestData: requestData, message: "Invalida data request") }
             self.webSocket?.send(.string(string.content), completionHandler: { [weak self] error in
-                self?.logger(status: .error, requestData: requestData, message: error?.localizedDescription)
+                guard let self = self, let error = error else { return }
+                self.logger(status: .error, requestData: requestData, message: error.localizedDescription)
             })
         }
         openConnectionSemaphore.signal()
