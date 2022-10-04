@@ -9,3 +9,16 @@ public protocol HttpEndpoint {
     var headers: [HttpHeader]? { get set }
     var body: Data? { get set }
 }
+
+extension HttpEndpoint {
+    public var urlComponents: URLComponents {
+        var  urlComponents = URLComponents()
+        urlComponents.scheme = scheme.rawValue
+        urlComponents.host = host
+        urlComponents.path = path
+        urlComponents.queryItems = queryItems
+        return urlComponents
+    }
+    
+    public var url: URL? { urlComponents.url }
+}
