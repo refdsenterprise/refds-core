@@ -21,4 +21,8 @@ public extension Encodable {
         if json.success { return DomainLogger(tag: .info, date: .current, content: json.content) }
         else { return DomainLogger(tag: .error, date: .current, content: json.content) }
     }
+    
+    var asData: Data? {
+        return try? JSONEncoder().encode(self)
+    }
 }
