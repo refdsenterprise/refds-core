@@ -15,7 +15,9 @@ public class HttpNetworkAdapter: HttpClient {
             return .failure(error)
         }
         
-        let urlRequest = makeUrlRequest(url: url, endpoint: request.httpEndpoint)
+        var urlRequest = makeUrlRequest(url: url, endpoint: request.httpEndpoint)
+        urlRequest.httpMethod = request.httpEndpoint.method.rawValue
+        urlRequest.httpBody = request.httpEndpoint.body
         
         guard let result = try? await session.data(for: urlRequest) else {
             let error = HttpError.noConnectivity(statusCode: 0, url: url)
