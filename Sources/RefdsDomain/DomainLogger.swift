@@ -17,8 +17,8 @@ public struct DomainLogger: DomainModel {
     
     public func console(withPresitence persistence: (Bool, UserDefaults?)? = nil) {
         let log = "\n[LOGGER] \(tag.rawValue) at [\(date.asString())]\n\(content)\n"
-        if let persistence = persistence, persistence.0 {
-            persistence.1?.set(self, forKey: "\(tag.rawValue) \(date.asString())")
+        if let persistence = persistence, persistence.0, let data = self.asData {
+            persistence.1?.set(data, forKey: "\(tag.rawValue) \(date.asString())")
         }
         print(log)
     }
