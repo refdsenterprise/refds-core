@@ -26,7 +26,7 @@ public extension HttpRequest where Response: DomainModel {
             }
             
             if let body = endpoint.body, let bodyString = String(data: body, encoding: .utf8) {
-                additionalMessage += "\n\t* Body: \(bodyString.replacingOccurrences(of: "\\/", with: "/").replacingOccurrences(of: "\n", with: " "))"
+                additionalMessage += "\n\t* Body: \(bodyString.replacingOccurrences(of: "\n", with: "\n\t\t"))"
             }
             
             additionalMessage += "\n\t* Response Type: \(Response.self)"
