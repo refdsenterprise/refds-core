@@ -25,6 +25,8 @@ public extension Encodable {
     }
     
     var asData: Data? {
-        return try? JSONEncoder().encode(self)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        return try? encoder.encode(self)
     }
 }
