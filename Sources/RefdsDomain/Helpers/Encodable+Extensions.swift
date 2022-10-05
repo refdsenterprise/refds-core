@@ -16,10 +16,12 @@ public extension Encodable {
         return (success: true, content: string)
     }
     
-    var logger: DomainLogger {
+    func logger(additionalMessage: String?) -> DomainLogger {
         let json = json
-        if json.success { return DomainLogger(tag: .info, date: .current, content: json.content) }
-        else { return DomainLogger(tag: .error, date: .current, content: json.content) }
+        var content = ""
+        if let additionalMessage = additionalMessage { content = additionalMessage }
+        content += "\n\t* Response: \(json.content.replacingOccurrences(of: "\n", with: " "))"
+        return DomainLogger(tag: json.success ? .info : .error, date: .current, content: content)
     }
     
     var asData: Data? {

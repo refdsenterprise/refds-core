@@ -9,53 +9,53 @@ public class HttpNetworkAdapter: HttpClient {
     }
     
     public func request<Request>(_ request: Request) async -> Result<Request.Response, HttpError> where Request : HttpRequest {
-        guard let url = makeUrlComponents(endpoint: request.httpEndpoint).url else {
+        guard let url = request.httpEndpoint.url else {
             let error = HttpError.invalidUrl
-            error.logger.console()
+            error.logger(additionalMessage: makeAdditionalMessage(withEndpoint: request.httpEndpoint)).console()
             return .failure(error)
         }
         
-        var urlRequest = makeUrlRequest(url: url, endpoint: request.httpEndpoint)
+        var urlRequest = request.httpEndpoint.urlRequest(url: url)
         urlRequest.httpMethod = request.httpEndpoint.method.rawValue
         urlRequest.httpBody = request.httpEndpoint.body
         
         guard let result = try? await session.data(for: urlRequest) else {
             let error = HttpError.noConnectivity(statusCode: 0, url: url)
-            error.logger.console()
+            error.logger(additionalMessage: makeAdditionalMessage(withEndpoint: request.httpEndpoint)).console()
             return .failure(error)
         }
         
         guard let statusCode = (result.1 as? HTTPURLResponse)?.statusCode else {
             let error = HttpError.noConnectivity(statusCode: 0, url: url)
-            error.logger.console()
+            error.logger(additionalMessage: makeAdditionalMessage(withEndpoint: request.httpEndpoint)).console()
             return .failure(error)
         }
         
         guard let decoded = try? request.decode(result.0) else {
             let error = handleError(url, statusCode: statusCode)
-            error.logger.console()
+            error.logger(additionalMessage: makeAdditionalMessage(withEndpoint: request.httpEndpoint)).console()
             return .failure(error)
         }
         
         return .success(decoded)
     }
     
-    private func makeUrlComponents(endpoint: HttpEndpoint) -> URLComponents {
-        var urlComponents = URLComponents()
-        urlComponents.scheme = endpoint.scheme.rawValue
-        urlComponents.host = endpoint.host
-        urlComponents.path = endpoint.path
-        urlComponents.queryItems = endpoint.queryItems
-        return urlComponents
-    }
-    
-    private func makeUrlRequest(url: URL, endpoint: HttpEndpoint) -> URLRequest {
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = endpoint.method.rawValue
-        urlRequest.allHTTPHeaderFields = endpoint.headers?.asDictionary
-        guard let body = endpoint.body else { return urlRequest }
-        urlRequest.httpBody = body
-        return urlRequest
+    private func makeAdditionalMessage(withEndpoint endpoint: HttpEndpoint?) -> String? {
+        if let endpoint = endpoint, let url = endpoint.url {
+            var additionalMessage = "\t* Endpoint: [\(endpoint.method.rawValue)] - \(url)"
+            
+            if let headers = endpoint.headers {
+                additionalMessage += "\n\t* Headers: [\(headers.map({ "\($0.rawValue.key): \($0.rawValue.value)" }).joined(separator: ", "))]"
+            }
+            
+            if let body = endpoint.body, let bodyString = String(data: body, encoding: .utf8) {
+                additionalMessage += "\n\t* Body: \(bodyString.replacingOccurrences(of: "\\", with: "").replacingOccurrences(of: "\n", with: " "))"
+            }
+            
+            return additionalMessage
+        }
+        
+        return nil
     }
     
     private func handleError(_ url: URL, statusCode: Int) -> HttpError {

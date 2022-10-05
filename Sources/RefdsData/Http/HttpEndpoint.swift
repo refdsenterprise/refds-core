@@ -20,5 +20,14 @@ extension HttpEndpoint {
         return urlComponents
     }
     
+    public func urlRequest(url: URL) -> URLRequest {
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = method.rawValue
+        urlRequest.allHTTPHeaderFields = headers?.asDictionary
+        guard let body = body else { return urlRequest }
+        urlRequest.httpBody = body
+        return urlRequest
+    }
+    
     public var url: URL? { urlComponents.url }
 }

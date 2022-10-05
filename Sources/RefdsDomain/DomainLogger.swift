@@ -1,7 +1,7 @@
 import Foundation
 
 public protocol DomainLoggerDataSource {
-    var logger: DomainLogger { get }
+    func logger(additionalMessage: String?) -> DomainLogger
 }
 
 public struct DomainLogger: DomainModel {
