@@ -7,7 +7,7 @@ public protocol HttpRequest {
     var httpClient: HttpClient { get set }
     var httpEndpoint: HttpEndpoint { get set }
     
-    func decode(_ data: Data) throws -> Response
+    func decode(_ data: Data, endpoint: HttpEndpoint?) throws -> Response
 }
 
 public extension HttpRequest where Response: DomainModel {

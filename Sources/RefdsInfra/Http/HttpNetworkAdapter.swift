@@ -31,7 +31,7 @@ public class HttpNetworkAdapter: HttpClient {
             return .failure(error)
         }
         
-        guard let decoded = try? request.decode(result.0) else {
+        guard let decoded = try? request.decode(result.0, endpoint: request.httpEndpoint) else {
             let error = handleError(url, statusCode: statusCode)
             error.logger(additionalMessage: makeAdditionalMessage(withEndpoint: request.httpEndpoint)).console()
             return .failure(error)
