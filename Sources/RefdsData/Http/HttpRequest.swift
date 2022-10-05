@@ -22,12 +22,14 @@ public extension HttpRequest where Response: DomainModel {
             var additionalMessage = "\t* Endpoint: [\(endpoint.method.rawValue)] - \(url)"
             
             if let headers = endpoint.headers {
-                additionalMessage += "\n\t* Headers: [\(headers.map({ "\($0.rawValue.key): \($0.rawValue.value)" }).joined(separator: ", "))]"
+                additionalMessage += "\n\t* Headers: [\n\t\t\(headers.map({ "\($0.rawValue.key): \($0.rawValue.value)" }).joined(separator: ",\n\t\t"))]"
             }
             
             if let body = endpoint.body, let bodyString = String(data: body, encoding: .utf8) {
-                additionalMessage += "\n\t* Body: \(bodyString.replacingOccurrences(of: "\\", with: "").replacingOccurrences(of: "\n", with: " "))"
+                additionalMessage += "\n\t* Body: \(bodyString.replacingOccurrences(of: "\\/", with: "/").replacingOccurrences(of: "\n", with: " "))"
             }
+            
+            additionalMessage += "\n\t* Response Type: \(Response.self)"
             
             return additionalMessage
         }

@@ -20,7 +20,7 @@ public extension Encodable {
         let json = json
         var content = ""
         if let additionalMessage = additionalMessage { content = additionalMessage }
-        content += "\n\t* Response: \(json.content)"
+        content += "\n\t* Response: \(json.content.replacingOccurrences(of: "\n", with: "\n\t\t"))"
         return DomainLogger(tag: json.success ? .info : .error, date: .current, content: content)
     }
     
