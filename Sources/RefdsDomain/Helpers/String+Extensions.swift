@@ -6,4 +6,6 @@ public extension String {
         dateFormatter.dateFormat = dateFomat
         return dateFormatter.date(from: self)
     }
+    
+    var asDouble: Double? { Double(self) }
 }
