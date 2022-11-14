@@ -14,7 +14,7 @@ let package = Package(
     products: [
         .library(
             name: "RefdsCore",
-            targets: ["RefdsDomain", "RefdsData", "RefdsInfra"])
+            targets: ["RefdsCore"])
     ],
     dependencies: [],
     targets: [
@@ -27,5 +27,8 @@ let package = Package(
         .target(
             name: "RefdsInfra",
             dependencies: ["RefdsData", "RefdsDomain"]),
+        .target(
+            name: "RefdsCore",
+            dependencies: ["RefdsDomain", "RefdsData", "RefdsInfra"]),
     ]
 )
