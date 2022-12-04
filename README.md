@@ -1,33 +1,44 @@
-# Core with Clean Architecture
+# Refds Core with Clean Architecture
 
-> Biblioteca para auxiliar na construção de um projeto em swift aplicando clean architecture, afim de padronizar e organizar o código desenvolvido, favorecer a sua reusabilidade, assim como independência de tecnologia.
+> Library to assist in the construction of a project in swift applying clean architecture, in order to standardize and organize the developed code, favoring its reusability, as well as technology independence.
 
 [![CI](https://github.com/rafaelesantos/refds-clean-architecture/actions/workflows/swift.yml/badge.svg)](https://github.com/rafaelesantos/refds-clean-architecture/actions/workflows/swift.yml)
 [![Swift Version][swift-image]][swift-url]
 [![License][license-image]][license-url]
 
-### O que é Clean Architecture?
+## Table of Contents
+* [General Information](#general-information)
+* [Technologies Used](#technologies-used)
+* [Features](#features)
+* [Setup](#setup)
 
-Clean Architecture é uma arquitetura de software proposta por Robert Cecil Martin (ou Uncle Bob, como é mais conhecido) que tem por objetivo padronizar e organizar o código desenvolvido, favorecer a sua reusabilidade, assim como independência de tecnologia.
+## General Information
 
-Por mais que a Clean Architecture foi criada em meados de 2012, está repleta de princípios atemporais que podem ser aplicados independente da tecnologia utilizada e linguagem de programação.
+- Clean Architecture is a software architecture proposed by Robert Cecil Martin (or Uncle Bob, as he is better known) that aims to standardize and organize the developed code, favoring its reusability, as well as technology independence.
+- As much as Clean Architecture was created in mid-2012, it is full of timeless principles that can be applied regardless of the technology used and programming language.
 
-### Camadas Implementadas
+## Technologies Used
 
-- [X] Camada de Domínio `RefdsDomain`
-- [X] Camada de Dados - `RefdsData`
-- [X] Camada de Infraestrutura - `RefdsInfra`
+- Xcode - version 14.1
+- Swift Tools - version 5.7
+- Swift Package Manager
 
-### Instalação
+## Features
 
-Adicione esse projeto em seu arquivo `Package.swift`.
+- [X] Domain Layer - `RefdsDomain`
+- [X] Data Layer - `RefdsData`
+- [X] Infra Layer - `RefdsInfra`
+
+## Setup
+
+Add this project to your `Package.swift` file.
 
 ```swift
 import PackageDescription
 
 let package = Package(
     dependencies: [
-        .package(url: "https://github.com/rafaelesantos/refds-core.git", branch: "main")
+        .package(url: "https://github.com/refdsenterprise/refds-core.git", branch: "main")
     ],
     targets: [
         .target(
