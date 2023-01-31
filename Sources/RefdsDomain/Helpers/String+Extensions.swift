@@ -8,8 +8,12 @@ public extension String {
     }
     
     var asDouble: Double? {
-        let string = self.replacingOccurrences(of: ".", with: "").replacingOccurrences(of: ",", with: ".")
-        return Double(string)
+        if let double = Double(self) {
+            return double
+        } else {
+            let string = self.replacingOccurrences(of: ".", with: "").replacingOccurrences(of: ",", with: ".")
+            return Double(string)
+        }
     }
     
     var asInt: Int? { Int(self) }
