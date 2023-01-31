@@ -19,16 +19,7 @@ let package = Package(
     dependencies: [],
     targets: [
         .target(
-            name: "RefdsDomain",
-            dependencies: []),
-        .target(
-            name: "RefdsData",
-            dependencies: ["RefdsDomain"]),
-        .target(
-            name: "RefdsInfra",
-            dependencies: ["RefdsData", "RefdsDomain"]),
-        .target(
             name: "RefdsCore",
-            dependencies: ["RefdsDomain", "RefdsData", "RefdsInfra"]),
+            dependencies: []),
     ]
 )

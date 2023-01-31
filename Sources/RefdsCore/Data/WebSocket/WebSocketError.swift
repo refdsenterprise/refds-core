@@ -1,5 +1,4 @@
 import Foundation
-import RefdsDomain
 
 public enum WebSocketError: Error, CustomStringConvertible {
     case invalidUrl

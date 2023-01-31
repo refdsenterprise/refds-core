@@ -1,5 +1,4 @@
 import Foundation
-import RefdsDomain
 
 public protocol HttpRequest {
     associatedtype Response

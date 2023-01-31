@@ -1,5 +1,4 @@
 import Foundation
-import RefdsData
 
 public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
     private var session: URLSession
@@ -30,7 +29,7 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
         session = URLSession(configuration: .default, delegate: self, delegateQueue: OperationQueue())
     }
     
-    public func webSocket<Request>(request: Request) -> Self where Request : RefdsData.WebSocketRequest {
+    public func webSocket<Request>(request: Request) -> Self where Request : WebSocketRequest {
         guard let url = makeUrlComponents(endpoint: request.webSocketEndpoint).url else {
             logger(status: .error, requestData: currentRequestData, message: "\(request.webSocketEndpoint)")
             self.error?(WebSocketError.invalidUrl)
@@ -46,13 +45,11 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
     public func send(with requestData: RequestData) {
         openConnectionSemaphore.wait()
         currentRequestData = requestData
-        subscribeQueue.async { [weak self] in
-            guard let self = self else { return }
+        subscribeQueue.async {
             let string = requestData.json
             guard string.success else { return self.logger(status: .error, requestData: requestData, message: "Invalida data request") }
-            self.webSocket?.send(.string(string.content), completionHandler: { [weak self] error in
-                guard let self = self, let error = error else { return }
-                self.logger(status: .error, requestData: requestData, message: error.localizedDescription)
+            self.webSocket?.send(.string(string.content), completionHandler: { error in
+                self.logger(status: .error, requestData: requestData, message: error?.localizedDescription)
             })
         }
         openConnectionSemaphore.signal()
@@ -68,10 +65,8 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
     }
     
     private func didReceive() {
-        webSocket?.receive(completionHandler: { [weak self] result in
-            guard let self = self else { return }
-            self.receiveQueue.async { [weak self] in
-                guard let self = self else { return }
+        webSocket?.receive(completionHandler: { result in
+            self.receiveQueue.async {
                 self.receiveSemaphore.wait()
                 switch result {
                 case .success(let message): self.success(didReceive: message)
