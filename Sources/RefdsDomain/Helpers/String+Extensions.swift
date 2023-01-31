@@ -7,7 +7,10 @@ public extension String {
         return dateFormatter.date(from: self)
     }
     
-    var asDouble: Double? { Double(self) }
+    var asDouble: Double? {
+        let string = self.replacingOccurrences(of: ".", with: "").replacingOccurrences(of: ",", with: ".")
+        return Double(string)
+    }
     
     var asInt: Int? { Int(self) }
 }
