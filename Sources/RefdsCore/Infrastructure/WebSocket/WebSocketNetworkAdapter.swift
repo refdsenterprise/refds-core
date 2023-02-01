@@ -10,6 +10,7 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
     public var status: ((WebSocketStatus) -> Void)?
     public var error: ((WebSocketError) -> Void)?
     public var success: ((Data) -> Void)?
+    public var repeats: Bool = false
     
     private let receiveQueue = DispatchQueue(
         label: "cedro.streaming.websocket.network.receive",
@@ -29,13 +30,13 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
         session = URLSession(configuration: .default, delegate: self, delegateQueue: OperationQueue())
     }
     
-    public func webSocket<Request>(request: Request) -> Self where Request : WebSocketRequest {
+    public func webSocket<Request>(request: Request, repeats: Bool = false) -> Self where Request : WebSocketRequest {
         guard let url = makeUrlComponents(endpoint: request.webSocketEndpoint).url else {
             logger(status: .error, requestData: currentRequestData, message: "\(request.webSocketEndpoint)")
             self.error?(WebSocketError.invalidUrl)
             return self
         }
-        
+        self.repeats = repeats
         webSocket = session.webSocketTask(with: url)
         webSocket?.resume()
         openConnectionSemaphore.wait()
@@ -51,8 +52,14 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
             self.webSocket?.send(.string(string.content), completionHandler: { error in
                 self.logger(status: .error, requestData: requestData, message: error?.localizedDescription)
             })
+            guard self.repeats else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) { self.send(with: requestData) }
         }
         openConnectionSemaphore.signal()
+    }
+    
+    public func stopRepeats() {
+        repeats = false
     }
     
     private func makeUrlComponents(endpoint: WebSocketEndpoint) -> URLComponents {
