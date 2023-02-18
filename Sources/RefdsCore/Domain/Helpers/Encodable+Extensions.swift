@@ -16,7 +16,7 @@ public extension Encodable {
         return (success: true, content: string)
     }
     
-    func logger(additionalMessage: String?) -> DomainLogger {
+    func logger(additionalMessage: String? = nil) -> DomainLogger {
         let json = json
         var content = ""
         if let additionalMessage = additionalMessage { content = additionalMessage }

@@ -17,7 +17,7 @@ public enum DomainError: Error, CustomStringConvertible {
 // MARK: - DomainLoggerDataSource
 
 extension DomainError: DomainLoggerDataSource {
-    public func logger(additionalMessage: String?) -> DomainLogger {
+    public func logger(additionalMessage: String? = nil) -> DomainLogger {
         var content = ""
         if let additionalMessage = additionalMessage { content = additionalMessage }
         content += "\n\t* Response: \(description)"

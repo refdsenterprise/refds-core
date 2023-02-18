@@ -25,7 +25,7 @@ public enum HttpError: Error, CustomStringConvertible {
 // MARK: - DomainLoggerDataSource
 
 extension HttpError: DomainLoggerDataSource {
-    public func logger(additionalMessage: String?) -> DomainLogger {
+    public func logger(additionalMessage: String? = nil) -> DomainLogger {
         var content = ""
         if let additionalMessage = additionalMessage { content = additionalMessage }
         content += "\n\t* Response: \(description)"
