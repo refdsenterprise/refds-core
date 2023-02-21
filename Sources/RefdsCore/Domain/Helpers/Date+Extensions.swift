@@ -3,9 +3,9 @@ import Foundation
 public extension Date {
     static var current: Date { return Date() }
     
-    func asString(withDateFormat dateFormat: String = "dd/MM/yyyy HH:mm:ss") -> String {
+    func asString(withDateFormat dateFormat: String.DateFormat = .dayMonthYear) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = dateFormat
+        dateFormatter.dateFormat = dateFormat.value
         return dateFormatter.string(from: self)
     }
 }

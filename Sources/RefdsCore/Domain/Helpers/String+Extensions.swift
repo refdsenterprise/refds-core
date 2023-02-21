@@ -1,9 +1,9 @@
 import Foundation
 
 public extension String {
-    func asDate(withFormat dateFomat: String = "dd/MM/yyyy") -> Date? {
+    func asDate(withFormat dateFomat: String.DateFormat = .dayMonthYear) -> Date? {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = dateFomat
+        dateFormatter.dateFormat = dateFomat.value
         return dateFormatter.date(from: self)
     }
     
@@ -17,4 +17,20 @@ public extension String {
     }
     
     var asInt: Int? { Int(self) }
+    
+    enum DateFormat {
+        case dayMonthYear
+        case monthYear
+        case weekMonthYear
+        case custom(String)
+        
+        public var value: String {
+            switch self {
+            case .dayMonthYear: return "dd/MM/yyyy"
+            case .monthYear: return "MM/yyyy"
+            case .weekMonthYear: return "EEEE/MM/yyyy"
+            case .custom(let dateFormat): return dateFormat
+            }
+        }
+    }
 }
