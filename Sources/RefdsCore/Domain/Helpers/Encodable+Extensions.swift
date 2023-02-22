@@ -3,6 +3,7 @@ import Foundation
 public extension Encodable {
     var json: (success: Bool, content: String) {
         let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "pt_BR")
         dateFormatter.dateFormat = "dd/MM/yyyy HH:mm:ss"
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
