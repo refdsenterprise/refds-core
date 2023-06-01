@@ -3,7 +3,7 @@ import Foundation
 public extension String {
     func asDate(withFormat dateFomat: String.DateFormat = .dayMonthYear) -> Date? {
         let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "pt_BR")
+        dateFormatter.locale = Locale.current
         dateFormatter.dateFormat = dateFomat.value
         return dateFormatter.date(from: self)
     }
