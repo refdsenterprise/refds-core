@@ -30,4 +30,26 @@ public extension Encodable {
         encoder.outputFormatting = .prettyPrinted
         return try? encoder.encode(self)
     }
+    
+    var asCSV: String? {
+        if let data = self.asData,
+           let dict = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
+            let keys = Set(dict.flatMap({ $0.keys })).map({ String($0) }).sorted(by: { $0 < $1 })
+            let header = keys.map({ $0.uppercased() }).joined(separator: ",") + "\n"
+            var body: String = ""
+            for element in dict {
+                var line: String = ""
+                for key in keys {
+                    if let value = element[key] {
+                        line += "\(String(describing:value)),"
+                    }
+                }
+                if line.last == "," { line.removeLast() }
+                line += "\n"
+                body += line
+            }
+            return header + body
+        }
+        return nil
+    }
 }
