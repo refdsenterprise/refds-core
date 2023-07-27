@@ -14,13 +14,13 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
     
     private let receiveQueue = DispatchQueue(
         label: "cedro.streaming.websocket.network.receive",
-        qos: .background,
+        qos: .default,
         attributes: .concurrent
     )
     
     private let subscribeQueue = DispatchQueue(
         label: "cedro.streaming.websocket.network.subscribe",
-        qos: .background,
+        qos: .default,
         attributes: .concurrent
     )
     
@@ -49,9 +49,7 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
         subscribeQueue.async {
             let string = requestData.json
             guard string.success else { return self.logger(status: .error, requestData: requestData, message: "Invalida data request") }
-            self.webSocket?.send(.string(string.content), completionHandler: { error in
-                self.logger(status: .error, requestData: requestData, message: error?.localizedDescription)
-            })
+            self.webSocket?.send(.string(string.content), completionHandler: { _ in })
             guard self.repeats else { return }
             DispatchQueue.main.asyncAfter(deadline: .now() + 5) { self.send(with: requestData) }
         }
