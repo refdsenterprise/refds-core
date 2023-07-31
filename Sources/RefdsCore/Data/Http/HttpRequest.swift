@@ -16,7 +16,7 @@ public extension HttpRequest where Response: DomainModel {
         return decoded
     }
     
-    func makeAdditionalMessage(withEndpoint endpoint: HttpEndpoint?) -> String? {
+    private func makeAdditionalMessage(withEndpoint endpoint: HttpEndpoint?) -> String? {
         if let endpoint = endpoint, let url = endpoint.url {
             var additionalMessage = "\t* Endpoint: [\(endpoint.method.rawValue)] - \(url)"
             
