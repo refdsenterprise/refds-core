@@ -46,6 +46,7 @@ public class WebSocketNetworkAdapter: NSObject, WebSocketClient {
     public func send(with requestData: RequestData) {
         openConnectionSemaphore.wait()
         currentRequestData = requestData
+        if !self.repeats { requestData.logger().console() }
         subscribeQueue.async {
             let string = requestData.json
             guard string.success else { return self.logger(status: .error, requestData: requestData, message: "Invalida data request") }
