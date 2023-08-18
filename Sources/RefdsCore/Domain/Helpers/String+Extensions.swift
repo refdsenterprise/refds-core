@@ -29,16 +29,16 @@ public extension String {
     
     static var randomParagraph: Self {
         var words = "";
-        for _ in 0 ..< Int.random(in: 10 ... 30) {
-            words += randomWord
+        for index in 0 ..< Int.random(in: 10 ... 30) {
+            words += (index != 0 ? " " : "") + randomWord
         }
         return words
     }
     
     static var randomText: Self {
         var paragraphs = "";
-        for _ in 0 ..< Int.random(in: 3 ... 6) {
-            paragraphs += randomParagraph
+        for index in 0 ..< Int.random(in: 3 ... 6) {
+            paragraphs += (index != 0 ? "\n" : "") randomParagraph
         }
         return paragraphs
     }
