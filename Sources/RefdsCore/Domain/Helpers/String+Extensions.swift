@@ -19,7 +19,7 @@ public extension String {
     
     var asInt: Int? { Int(self) }
     
-    var randomWord: Self {
+    static var randomWord: Self {
         var letters = "";
         for _ in 0 ..< Int.random(in: 4 ... 12) {
             letters += String(format: "%c", Int.random(in: 97 ..< 123))
@@ -27,7 +27,7 @@ public extension String {
         return letters
     }
     
-    var randomParagraph: Self {
+    static var randomParagraph: Self {
         var words = "";
         for _ in 0 ..< Int.random(in: 10 ... 30) {
             words += randomWord
@@ -35,7 +35,7 @@ public extension String {
         return words
     }
     
-    var randomText: Self {
+    static var randomText: Self {
         var paragraphs = "";
         for _ in 0 ..< Int.random(in: 3 ... 6) {
             paragraphs += randomParagraph
