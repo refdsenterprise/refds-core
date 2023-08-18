@@ -38,7 +38,7 @@ public extension String {
     static var randomText: Self {
         var paragraphs = "";
         for index in 0 ..< Int.random(in: 3 ... 6) {
-            paragraphs += (index != 0 ? "\n" : "") randomParagraph
+            paragraphs += (index != 0 ? "\n" : "") + randomParagraph
         }
         return paragraphs
     }
