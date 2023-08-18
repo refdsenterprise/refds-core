@@ -19,6 +19,30 @@ public extension String {
     
     var asInt: Int? { Int(self) }
     
+    var randomWord: Self {
+        var letters = "";
+        for _ in 0 ..< Int.random(in: 4 ... 12) {
+            letters += String(format: "%c", Int.random(in: 97 ..< 123))
+        }
+        return letters
+    }
+    
+    var randomParagraph: Self {
+        var words = "";
+        for _ in 0 ..< Int.random(in: 10 ... 30) {
+            words += randomWord
+        }
+        return words
+    }
+    
+    var randomText: Self {
+        var paragraphs = "";
+        for _ in 0 ..< Int.random(in: 3 ... 6) {
+            paragraphs += randomParagraph
+        }
+        return paragraphs
+    }
+    
     enum DateFormat {
         case dayMonthYear
         case monthYear
