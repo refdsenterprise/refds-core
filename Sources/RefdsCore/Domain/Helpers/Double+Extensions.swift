@@ -14,8 +14,9 @@ public extension Double {
     }
     
     var distance: String {
-        let km = self / 1000
-        let m = self - (km * 1000)
+        let current = Int(self)
+        let km = (self / 1000)
+        let m = (self - (km * 1000))
         return "\(km)km \(m)m"
     }
 }
