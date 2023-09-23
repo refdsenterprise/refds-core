@@ -1,6 +1,6 @@
 import Foundation
 
-public enum DomainError: Error, CustomStringConvertible {
+public enum DomainError: Error, CustomStringConvertible, Equatable {
     case decodedError(type: Decodable.Type)
     case encodedError(type: Encodable.Type)
     case requestError(error: Error)
@@ -13,6 +13,10 @@ public enum DomainError: Error, CustomStringConvertible {
         case .requestError(let description): return "Error on request - \(description)"
         case .notFound(let type): return "Error - not found - \(type.self)"
         }
+    }
+    
+    public static func == (lhs: DomainError, rhs: DomainError) -> Bool {
+        lhs.description == rhs.description
     }
 }
 
