@@ -34,13 +34,13 @@ public extension Double {
         
         switch num {
         case 1_000_000_000...:
-            return "\(sign)\((num / 1_000_000_000).reduceScale(to: 1))B"
+            return String(format: "\(sign)%.2fB", (num / 1_000_000_000).reduceScale(to: 1))
         case 1_000_000...:
-            return "\(sign)\((num / 1_000_000).reduceScale(to: 1))M"
+            return String(format: "\(sign)%.2fM", (num / 1_000_000).reduceScale(to: 1))
         case 1_000...:
-            return "\(sign)\((num / 1_000).reduceScale(to: 1))K"
+            return String(format: "\(sign)%.2fK", (num / 1_000).reduceScale(to: 1))
         case 0...:
-            return "\(self)"
+            return String(format: "\(sign)%.2f", self)
         default:
             return "\(sign)\(self)"
         }
