@@ -28,7 +28,7 @@ public extension Double {
         return originalDecimal
     }
     
-    var asFormattedString: String {
+    var formatted: String {
         let num = abs(self)
         let sign = self < 0 ? "-" : ""
         
@@ -40,7 +40,7 @@ public extension Double {
         case 1_000...:
             return String(format: "\(sign)%.2fK", (num / 1_000).reduceScale(to: 1))
         case 0...:
-            return String(format: "\(sign)%.2f", self)
+            return String(format: "%.2f", self)
         default:
             return "\(sign)\(self)"
         }
