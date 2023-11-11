@@ -42,7 +42,7 @@ public extension Double {
         case 0...:
             return String(format: "%.2f", self)
         default:
-            return "\(sign)\(self)"
+            return String(format: "%.2f", self)
         }
     }
 }
