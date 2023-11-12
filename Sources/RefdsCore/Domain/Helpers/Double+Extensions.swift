@@ -29,20 +29,21 @@ public extension Double {
     }
     
     var formatted: String {
-        let num = abs(self)
-        let sign = self < 0 ? "-" : ""
-        
-        switch num {
-        case 1_000_000_000...:
-            return String(format: "\(sign)%.2fB", (num / 1_000_000_000).reduceScale(to: 1))
-        case 1_000_000...:
-            return String(format: "\(sign)%.2fM", (num / 1_000_000).reduceScale(to: 1))
-        case 1_000...:
-            return String(format: "\(sign)%.2fK", (num / 1_000).reduceScale(to: 1))
-        case 0...:
-            return String(format: "%.2f", self)
-        default:
-            return String(format: "%.2f", self)
-        }
+//        let num = abs(self)
+//        let sign = self < 0 ? "-" : ""
+//        
+//        switch num {
+//        case 1_000_000_000...:
+//            return String(format: "\(sign)%.2fB", (num / 1_000_000_000).reduceScale(to: 1))
+//        case 1_000_000...:
+//            return String(format: "\(sign)%.2fM", (num / 1_000_000).reduceScale(to: 1))
+//        case 1_000...:
+//            return String(format: "\(sign)%.2fK", (num / 1_000).reduceScale(to: 1))
+//        case 0...:
+//            return String(format: "%.2f", self)
+//        default:
+//            return String(format: "%.2f", self)
+//        }
+        String(format: "%.2f", self)
     }
 }
