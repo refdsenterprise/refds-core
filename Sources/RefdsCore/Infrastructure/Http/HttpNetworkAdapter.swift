@@ -19,7 +19,7 @@ public class HttpNetworkAdapter: HttpClient {
         urlRequest.httpBody = request.httpEndpoint.body
         
         session.dataTask(with: urlRequest) { data, response, error in
-            guard let data = data, let response = response, error != nil else {
+            guard let data = data, let response = response, error == nil else {
                 let error = HttpError.noConnectivity(statusCode: 0, url: url)
                 error.logger(additionalMessage: self.makeAdditionalMessage(withEndpoint: request.httpEndpoint)).console()
                 return completion(.failure(error))
