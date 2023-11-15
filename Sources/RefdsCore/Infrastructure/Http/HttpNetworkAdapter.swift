@@ -38,7 +38,7 @@ public class HttpNetworkAdapter: HttpClient {
             }
             
             completion(.success(decoded))
-        }
+        }.resume()
     }
     
     private func makeAdditionalMessage(withEndpoint endpoint: HttpEndpoint?) -> String? {
