@@ -7,36 +7,38 @@ public class HttpNetworkAdapter: HttpClient {
         self.session = session
     }
     
-    public func request<Request>(_ request: Request) async -> Result<Request.Response, HttpError> where Request : HttpRequest {
+    public func request<Request>(_ request: Request, completion: @escaping (Result<Request.Response, HttpError>) -> Void) where Request : HttpRequest {
         guard let url = request.httpEndpoint.url else {
             let error = HttpError.invalidUrl
             error.logger(additionalMessage: makeAdditionalMessage(withEndpoint: request.httpEndpoint)).console()
-            return .failure(error)
+            return completion(.failure(error))
         }
         
         var urlRequest = request.httpEndpoint.urlRequest(url: url)
         urlRequest.httpMethod = request.httpEndpoint.method.rawValue
         urlRequest.httpBody = request.httpEndpoint.body
         
-        guard let result = try? await session.data(for: urlRequest) else {
-            let error = HttpError.noConnectivity(statusCode: 0, url: url)
-            error.logger(additionalMessage: makeAdditionalMessage(withEndpoint: request.httpEndpoint)).console()
-            return .failure(error)
+        session.dataTask(with: urlRequest) { data, response, error in
+            guard let data = data, let response = response, error != nil else {
+                let error = HttpError.noConnectivity(statusCode: 0, url: url)
+                error.logger(additionalMessage: self.makeAdditionalMessage(withEndpoint: request.httpEndpoint)).console()
+                return completion(.failure(error))
+            }
+            
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+                let error = HttpError.noConnectivity(statusCode: 0, url: url)
+                error.logger(additionalMessage: self.makeAdditionalMessage(withEndpoint: request.httpEndpoint)).console()
+                return completion(.failure(error))
+            }
+            
+            guard let decoded = try? request.decode(data, endpoint: request.httpEndpoint) else {
+                let error = self.handleError(url, statusCode: statusCode)
+                error.logger(additionalMessage: self.makeAdditionalMessage(withEndpoint: request.httpEndpoint)).console()
+                return completion(.failure(error))
+            }
+            
+            completion(.success(decoded))
         }
-        
-        guard let statusCode = (result.1 as? HTTPURLResponse)?.statusCode else {
-            let error = HttpError.noConnectivity(statusCode: 0, url: url)
-            error.logger(additionalMessage: makeAdditionalMessage(withEndpoint: request.httpEndpoint)).console()
-            return .failure(error)
-        }
-        
-        guard let decoded = try? request.decode(result.0, endpoint: request.httpEndpoint) else {
-            let error = handleError(url, statusCode: statusCode)
-            error.logger(additionalMessage: makeAdditionalMessage(withEndpoint: request.httpEndpoint)).console()
-            return .failure(error)
-        }
-        
-        return .success(decoded)
     }
     
     private func makeAdditionalMessage(withEndpoint endpoint: HttpEndpoint?) -> String? {
