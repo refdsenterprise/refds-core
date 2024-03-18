@@ -1,4 +1,5 @@
 import Foundation
+import CryptoKit
 
 public extension String {
     func asDate(withFormat dateFomat: String.DateFormat = .dayMonthYear) -> Date? {
@@ -18,6 +19,11 @@ public extension String {
     }
     
     var asInt: Int? { Int(self) }
+    
+    var asMD5: String {
+        let digest = Insecure.MD5.hash(data: Data(self.utf8))
+        return digest.map { String(format: "%02hhx", $0) }.joined()
+    }
     
     static var randomWord: Self {
         var letters = "";
